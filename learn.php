@@ -1,56 +1,107 @@
 <?php
 
-require 'vendor/autoload.php';
+// ($exportedArray, 'baseLine', $this->getBaseLine());
+// ($exportedArray, 'bold', $this->getBold());
+// ($exportedArray, 'cap', $this->getCap());
+// ($exportedArray, 'chartColor', $this->getChartColor());
+// ($exportedArray, 'color', $this->getColor());
+// ($exportedArray, 'complexScript', $this->getComplexScript());
+// ($exportedArray, 'eastAsian', $this->getEastAsian());
+// ($exportedArray, 'italic', $this->getItalic());
+// ($exportedArray, 'latin', $this->getLatin());
+// ($exportedArray, 'name', $this->getName());
+// ($exportedArray, 'scheme', $this->getScheme());
+// ($exportedArray, 'size', $this->getSize());
+// ($exportedArray, 'strikethrough', $this->getStrikethrough());
+// ($exportedArray, 'strikeType', $this->getStrikeType());
+// ($exportedArray, 'subscript', $this->getSubscript());
+// ($exportedArray, 'superscript', $this->getSuperscript());
+// ($exportedArray, 'underline', $this->getUnderline());
+// ($exportedArray, 'underlineColor', $this->getUnderlineColor());
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Worksheet;
+// foreach($arrFills as $a){
+//     $b = explode(' ', $a);
+//     echo join(' ', array_reverse($b)).",";
+//     echo "<br>";
+// }
 
-//str_replace
 
-function getInner($arr){
-    $str = '';
-    foreach($arr as $k => $v){
-    }
-    if (is_array($arr)){
-        return getInner($arr);
-    }
-    return $str.$arr;
-}
+// $writer = new Xlsx($spreadsheet);
 
-function makeStyleTemplate()
-{
-    $baseTemplate = [
-            '_variable_->getActiveSheet()->getStyle($cell)->applyFromArray(',
-            'alingment' => "'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_,]
-            ],",
-            ');'
-        ];
+// $writer->save('New One.xlsx');
 
-    $str = '';
 
-    foreach($baseTemplate as $value){
-        if(is_array($value)){
-            foreach($value as $v){
-                echo $v."<br>";
-            }
-        }
-        echo $value."<br>";
-    }
-}
+// 'font' => [
+//     'bold' => true,
+// ],
+// 'alignment' => [
+//     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+// ],
+// 'borders' => [
+//     'top' => [
+//         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+//     ],
+// ],
+// 'fill' => [
+//     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+//     'rotation' => 90,
+//     'startColor' => [
+//         'argb' => 'FFA0A0A0',
+//     ],
+//     'endColor' => [
+//         'argb' => 'FFFFFFFF',
+//     ],
+// ],
 
-$align = [
-    "'alignment' => [
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<HOR>,
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<VER>,
-        'textWrap' => <WRAP>,
-        'size' => <SIZE>,
-        'name' => <NAME>
-    ],"
+// $cellParams = [
+//     'alingment' => [
+//         'Horizontal' => $cell->getStyle('B1')->getAlignment()->getHorizontal(),
+//         'Vertical' => $cell->getStyle('B1')->getAlignment()->getVertical(),
+//         'Rotation' => $cell->getStyle('B1')->getAlignment()->getTextRotation(),
+//         'TextWrap' => $cell->getStyle('B1')->getAlignment()->getWrapText()
+//     ],
+//     'cell' => [
+//         'rowHeight' => $cell->getRowDimension('1')->getRowHeight(),
+//         'columnWidth' => $cell->getColumnDimension('B')->getWidth(),
+//         'cellValue' => $cell->getCell('B1')->getValue()
+//     ],
+//     'font' => [
+//         'size' => $cell->getStyle('B1')->getFont()->getSize(),
+//         'name' => $cell->getStyle('B1')->getFont()->getName(),
+//         'color' => $cell->getStyle('B1')->getFont()->getColor()->getARGB(),
+//         'subscript' => $cell->getStyle('B1')->getFont()->getSubscript(),
+//         'superscript' => $cell->getStyle('B1')->getFont()->getSuperscript(),
+//         'underline' => $cell->getStyle('B1')->getFont()->getUnderline(),
+//         'bold' => $cell->getStyle('B1')->getFont()->getBold(),
+//         'italic' => $cell->getStyle('B1')->getFont()->getItalic(),
+//         'strikethrough' => $cell->getStyle('B1')->getFont()->getStrikethrough()
+//     ],
+//     'fill' => [
+//         'fillType' => $cell->getStyle('B1')->getFill()->getFillType(),
+//         'rotation' => $cell->getStyle('B1')->getFill()->getRotation(),
+//         'startColor' => $cell->getStyle('B1')->getFill()->getStartColor()->getARGB(),
+//         'endColor' => $cell->getStyle('B1')->getFill()->getEndColor()->getARGB(),
+//     ],
+//     'borders' => [
+//         'left' => $cell->getStyle('B1')->getBorders()->getLeft()->getBorderStyle(),
+//         'right' => $cell->getStyle('B1')->getBorders()->getRight()->getBorderStyle(),
+//         'top' => $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle(),
+//         'bottom' => $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle(),
+//         'diagonal' => $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle(),
+//         // 'outline' => $cell->getStyle('B1')->getBorders()->getOutline()->getBorderStyle(),
+//         // 'inside' => $cell->getStyle('B1')->getBorders()->getInside()->getBorderStyle(),
+//         // 'vertical' => $cell->getStyle('B1')->getBorders()->getVertical()->getBorderStyle(),
+//         // 'horizontal' => $cell->getStyle('B1')->getBorders()->getHorizontal()->getBorderStyle(),
+//     ]
 
-];
+// ];
+    require 'vendor/autoload.php';
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+    use PhpOffice\PhpSpreadsheet\Worksheet;
+
+// class MakeTemplate{
 
 $bord = [
     'borders' => [
@@ -156,78 +207,80 @@ $arrFills = [
     'mediumGray' => 'FILL_PATTERN_MEDIUMGRAY',
 ];
 
-// ($exportedArray, 'baseLine', $this->getBaseLine());
-// ($exportedArray, 'bold', $this->getBold());
-// ($exportedArray, 'cap', $this->getCap());
-// ($exportedArray, 'chartColor', $this->getChartColor());
-// ($exportedArray, 'color', $this->getColor());
-// ($exportedArray, 'complexScript', $this->getComplexScript());
-// ($exportedArray, 'eastAsian', $this->getEastAsian());
-// ($exportedArray, 'italic', $this->getItalic());
-// ($exportedArray, 'latin', $this->getLatin());
-// ($exportedArray, 'name', $this->getName());
-// ($exportedArray, 'scheme', $this->getScheme());
-// ($exportedArray, 'size', $this->getSize());
-// ($exportedArray, 'strikethrough', $this->getStrikethrough());
-// ($exportedArray, 'strikeType', $this->getStrikeType());
-// ($exportedArray, 'subscript', $this->getSubscript());
-// ($exportedArray, 'superscript', $this->getSuperscript());
-// ($exportedArray, 'underline', $this->getUnderline());
-// ($exportedArray, 'underlineColor', $this->getUnderlineColor());
+    $align =
+    "'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<HOR>,
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<VER>,
+        'textWrap' => <WRAP>,
+        'size' => <SIZE>,
+        'name' => <NAME>,
+        'rotation' => <R>
+    ],";
+    $reader;
 
-// foreach($arrFills as $a){
-//     $b = explode(' ', $a);
-//     echo join(' ', array_reverse($b)).",";
-//     echo "<br>";
+    // function __construct($pathToXlsxFile){
+        $reader = IOFactory::createReader('Xlsx');
+        $spr = $reader->load('New One.xlsx');
+        // // Только чтение данных
+        $reader->setReadDataOnly(true);
+        $cell = $spr->getActiveSheet();
+    // }
+
+    // function makeStyleTemplate($WordSheet, $startLetter=1, $endLetter=1, $startRow=9, $endRow=7)
+    // {
+
+        $end = ');';
+
+        $afterRes = [];
+        
+        $baseTemplate = [
+            '_variable_->getActiveSheet()->getStyle($cell)->applyFromArray(',
+    
+        ];
+        
+        //alignment
+        $c = $cell->getStyle('B1')->getAlignment()->getHorizontal();
+        echo str_replace('<HELLO>', "BYE", "<HELLO> user");
+        $baseTemplate["alignment"] = str_replace('<HOR>', $arrAlignmentHorizontal[$c], $align);
+        $c = $cell->getStyle('B1')->getAlignment()->getVertical();
+        $baseTemplate["alignment"] = str_replace('<VER>', $arrAlignmentVertical[$c], $align);
+        $c = $cell->getStyle('B1')->getAlignment()->getTextRotation();
+        $baseTemplate["alignment"] = str_replace('<R>', $c, $align);
+        $c = $cell->getStyle('B1')->getAlignment()->getWrapText();
+        $baseTemplate["alignment"] = str_replace('<WRAP>', $c, $align);
+        $c = $cell->getRowDimension('1')->getRowHeight();
+        array_push($afterRes, '_variable_->getRowDimension(1)->setRowHeight();');
+        $c = $cell->getColumnDimension('B')->getWidth();
+        array_push($afterRes, '_variable_->getColumnDimension(B1)->getWidth();');
+        $c = $cell->getCell('B1')->getValue();
+        array_push($afterRes, '_variable_->getColumnDimension(B1)->getWidth();');
+        echo "<pre>";
+        var_dump($baseTemplate);
+        echo "</pre>";
+
+        //font
+        $c = $cell->getStyle('B1')->getFont()->getSize();
+        $c = $cell->getStyle('B1')->getFont()->getName();
+        $c = $cell->getStyle('B1')->getFont()->getColor()->getARGB();
+        $c = $cell->getStyle('B1')->getFont()->getSubscript();
+        $c = $cell->getStyle('B1')->getFont()->getSuperscript();
+        $c = $cell->getStyle('B1')->getFont()->getUnderline();
+        $c = $cell->getStyle('B1')->getFont()->getBold();
+        $c = $cell->getStyle('B1')->getFont()->getItalic();
+        $c = $cell->getStyle('B1')->getFont()->getStrikethrough();
+        //fill
+        $c = $cell->getStyle('B1')->getFill()->getFillType();
+        $c = $cell->getStyle('B1')->getFill()->getRotation();
+        $c = $cell->getStyle('B1')->getFill()->getStartColor()->getARGB();
+        $c = $cell->getStyle('B1')->getFill()->getEndColor()->getARGB();
+        //borders
+        $c = $cell->getStyle('B1')->getBorders()->getLeft()->getBorderStyle();
+        $c = $cell->getStyle('B1')->getBorders()->getRight()->getBorderStyle();
+        $c = $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle();
+        $c = $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle();
+        $c = $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle();
+    
+    
+    // }
 // }
 
-
-// $writer = new Xlsx($spreadsheet);
-
-// $writer->save('New One.xlsx');
-
-
-
-$reader = IOFactory::createReader('Xlsx');
-$spr = $reader->load('New One.xlsx');
-// // Только чтение данных
-$reader->setReadDataOnly(true);
-$cur = $spr->getActiveSheet();
-
-// 'font' => [
-//     'bold' => true,
-// ],
-// 'alignment' => [
-//     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-// ],
-// 'borders' => [
-//     'top' => [
-//         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-//     ],
-// ],
-// 'fill' => [
-//     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-//     'rotation' => 90,
-//     'startColor' => [
-//         'argb' => 'FFA0A0A0',
-//     ],
-//     'endColor' => [
-//         'argb' => 'FFFFFFFF',
-//     ],
-// ],
-
-for ($i = 1; $i <= 1; $i++) {
-    echo "<h1>------------------------</h1>";
-    $cell = $cur->getCell('A1');
-    $cellStyle = $cell->getStyle()->getBorders()->getBottom()->getBorderStyle();
-    $cellAlingHor = $cell->getStyle()->getAlignment()->getHorizontal();
-    $cellAlingVer = $cell->getStyle()->getAlignment()->getVertical();
-    $cellFont = $cell->getStyle()->getFont()->getCap();
-    // $cellAlingVer = $cell->getStyle()->;
-    // $cellAlingVer = $cell->getStyle()->;
-    // $cellAlingVer = $cell->getStyle()->;
-    echo "</pre>";
-    var_dump($cellAlingHor, $cellAlingVer);
-    echo "<h1>------------------------</h1>";
-    echo "</pre>";
-}
