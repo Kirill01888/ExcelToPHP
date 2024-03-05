@@ -95,11 +95,12 @@
 //     ]
 
 // ];
-    require 'vendor/autoload.php';
-    use PhpOffice\PhpSpreadsheet\Spreadsheet;
-    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-    use PhpOffice\PhpSpreadsheet\IOFactory;
-    use PhpOffice\PhpSpreadsheet\Worksheet;
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Worksheet;
 
 // class MakeTemplate{
 
@@ -187,100 +188,134 @@ $arrFills = [
     'none' => 'FILL_NONE',
     'solid' => 'FILL_SOLID',
     'linear' => 'FILL_GRADIENT_LINEAR',
-    'path' => 'FILL_GRADIENT_PATH',
-    'darkDown' => 'FILL_PATTERN_DARKDOWN',
-    'darkGray' => 'FILL_PATTERN_DARKGRAY',
-    'darkGrid' => 'FILL_PATTERN_DARKGRID',
-    'darkHorizontal' => 'FILL_PATTERN_DARKHORIZONTAL',
-    'darkTrellis' => 'FILL_PATTERN_DARKTRELLIS',
-    'darkUp' => 'FILL_PATTERN_DARKUP',
-    'darkVertical' => 'FILL_PATTERN_DARKVERTICAL',
-    'gray0625' => 'FILL_PATTERN_GRAY0625',
-    'gray125' => 'FILL_PATTERN_GRAY125',
-    'lightDown' => 'FILL_PATTERN_LIGHTDOWN',
-    'lightGray' => 'FILL_PATTERN_LIGHTGRAY',
-    'lightGrid' => 'FILL_PATTERN_LIGHTGRID',
-    'lightHorizontal' => 'FILL_PATTERN_LIGHTHORIZONTAL',
-    'lightTrellis' => 'FILL_PATTERN_LIGHTTRELLIS',
-    'lightUp' => 'FILL_PATTERN_LIGHTUP',
-    'lightVertical' => 'FILL_PATTERN_LIGHTVERTICAL',
-    'mediumGray' => 'FILL_PATTERN_MEDIUMGRAY',
+    'path' => 'FILL_GRADIENT_PATH'
 ];
 
-    $align =
-    "'alignment' => [
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<HOR>,
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<VER>,
-        'textWrap' => <WRAP>,
-        'size' => <SIZE>,
-        'name' => <NAME>,
-        'rotation' => <R>
-    ],";
-    $reader;
+$arrUnderLine = [
+    'none' => 'UNDERLINE_NONE',
+    'double' => 'UNDERLINE_DOUBLE',
+    'doubleAccounting' => 'UNDERLINE_DOUBLEACCOUNTING',
+    'single' => 'UNDERLINE_SINGLE',
+    'singleAccounting' => 'UNDERLINE_SINGLEACCOUNTING'
+];
+// function __uct($pathToXlsxFile){
+$reader = IOFactory::createReader('Xlsx');
+$spr = $reader->load('New One.xlsx');
+// // Только чтение данных
+$reader->setReadDataOnly(true);
+$cell = $spr->getActiveSheet();
+// }
 
-    // function __construct($pathToXlsxFile){
-        $reader = IOFactory::createReader('Xlsx');
-        $spr = $reader->load('New One.xlsx');
-        // // Только чтение данных
-        $reader->setReadDataOnly(true);
-        $cell = $spr->getActiveSheet();
-    // }
+// function makeStyleTemplate($WordSheet, $startLetter=1, $endLetter=1, $startRow=9, $endRow=7)
+// {
 
-    // function makeStyleTemplate($WordSheet, $startLetter=1, $endLetter=1, $startRow=9, $endRow=7)
-    // {
+$myHash = '';
 
-        $end = ');';
+$end = ');';
 
-        $afterRes = [];
-        
-        $baseTemplate = [
-            '_variable_->getActiveSheet()->getStyle($cell)->applyFromArray(',
+$afterRes = [];
+
+$baseTemplate = [
+    '_variable_->getActiveSheet()->getStyle($cell)->applyFromArray(',
+    'alignment' => "'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<HOR>,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::<VER>,
+                'textWrap' => <WRAP>,
+                'size' => <SIZE>,
+                'name' => <NAME>,
+                'rotation' => <R>
+            ],",
+    'font' => "'font' => [
+                'bold' => <BOLD>,
+                'italic' => <ITAL>,
+                'subscript' => <SUB>,
+                'superscript' => <SUP>,
+                'color' => <ARGB>,
+                'underline' => <UND>,
+                'strikethrough' => <STK>],"
+];
+
+//alignment
+$c = $cell->getStyle('B1')->getAlignment()->getHorizontal();
+$myHash .= substr($c, 0, 3);
+$baseTemplate["alignment"] = str_replace('<HOR>', $arrAlignmentHorizontal[$c], $baseTemplate['alignment']);
+$c = $cell->getStyle('B1')->getAlignment()->getVertical();
+$myHash .= substr($c, 0, 3);
+$baseTemplate["alignment"] = str_replace('<VER>', $arrAlignmentVertical[$c], $baseTemplate["alignment"]);
+$c = $cell->getStyle('B1')->getAlignment()->getTextRotation();
+$baseTemplate["alignment"] = str_replace('<R>', $c, $baseTemplate["alignment"]);
+$c = $cell->getStyle('B1')->getAlignment()->getWrapText() ? 'true' : 'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["alignment"] = str_replace('<WRAP>', $c, $baseTemplate["alignment"]);
+$c = $cell->getRowDimension('1')->getRowHeight();
+array_push($afterRes, '_variable_->getRowDimension()->setRowHeight();');
+$c = $cell->getColumnDimension('B')->getWidth();
+array_push($afterRes, '_variable_->getColumnDimension()->setWidth();');
+$c = $cell->getCell('B1')->getValue();
+array_push($afterRes, '_variable_->getCell()->setValue();');
+
+$font =
+    "'font' => 
+            'bold' => <BOLD>,
+            'italic' => <ITAL>,
+            'subscript' => <SUB>,
+            'superscript' => <SUP>,
+            'color' => <ARGB>,
+            'underline' => \PhpOffice\PhpSpreadsheet\Style\Font::<UND>,
+            'strikethrough' => <STK>,
+            ";
+$fill = 
+"'fill' => 
     
-        ];
-        
-        //alignment
-        $c = $cell->getStyle('B1')->getAlignment()->getHorizontal();
-        echo str_replace('<HELLO>', "BYE", "<HELLO> user");
-        $baseTemplate["alignment"] = str_replace('<HOR>', $arrAlignmentHorizontal[$c], $align);
-        $c = $cell->getStyle('B1')->getAlignment()->getVertical();
-        $baseTemplate["alignment"] = str_replace('<VER>', $arrAlignmentVertical[$c], $align);
-        $c = $cell->getStyle('B1')->getAlignment()->getTextRotation();
-        $baseTemplate["alignment"] = str_replace('<R>', $c, $align);
-        $c = $cell->getStyle('B1')->getAlignment()->getWrapText();
-        $baseTemplate["alignment"] = str_replace('<WRAP>', $c, $align);
-        $c = $cell->getRowDimension('1')->getRowHeight();
-        array_push($afterRes, '_variable_->getRowDimension(1)->setRowHeight();');
-        $c = $cell->getColumnDimension('B')->getWidth();
-        array_push($afterRes, '_variable_->getColumnDimension(B1)->getWidth();');
-        $c = $cell->getCell('B1')->getValue();
-        array_push($afterRes, '_variable_->getColumnDimension(B1)->getWidth();');
-        echo "<pre>";
-        var_dump($baseTemplate);
-        echo "</pre>";
+"
+//font
+$c = $cell->getStyle('B1')->getFont()->getSize();
+$baseTemplate["alignment"] = str_replace('<SIZE>', $c, $baseTemplate["alignment"]);
+$c = $cell->getStyle('B1')->getFont()->getName();
+$myHash .= substr($c, 0, 3);
+$baseTemplate["alignment"] = str_replace('<NAME>', $c, $baseTemplate["alignment"]);
+$c = $cell->getStyle('B1')->getFont()->getColor()->getARGB();
+$baseTemplate["font"] = str_replace('<ARGB>', $c, $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getSubscript() ? 'true':'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<SUB>', $c, $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getSuperscript() ? 'true':'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<SUP>', $c, $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getUnderline();
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<UND>', $arrUnderLine[$c], $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getBold() ? 'true':'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<BOLD>', $c, $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getItalic() ? 'true':'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<ITAL>', $c, $baseTemplate["font"]);
+$c = $cell->getStyle('B1')->getFont()->getStrikethrough() ? 'true':'false';
+$myHash .= substr($c, 0, 3);
+$baseTemplate["font"] = str_replace('<STK>', $c, $baseTemplate["font"]);
+echo "<pre>";
+echo $myHash . '<br>';
+var_dump($baseTemplate);
+echo "</pre>";
+//fill
+$c = $cell->getStyle('B1')->getFill()->getFillType();
+if($c != null){
+    $baseTemplate['fill'] = '';
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate["fill"] = str_replace('<STK>', $c, $baseTemplate["font"]);
+    $c = $cell->getStyle('B1')->getFill()->getRotation();
+    $c = $cell->getStyle('B1')->getFill()->getStartColor()->getARGB();
+    $c = $cell->getStyle('B1')->getFill()->getEndColor()->getARGB();
+}
 
-        //font
-        $c = $cell->getStyle('B1')->getFont()->getSize();
-        $c = $cell->getStyle('B1')->getFont()->getName();
-        $c = $cell->getStyle('B1')->getFont()->getColor()->getARGB();
-        $c = $cell->getStyle('B1')->getFont()->getSubscript();
-        $c = $cell->getStyle('B1')->getFont()->getSuperscript();
-        $c = $cell->getStyle('B1')->getFont()->getUnderline();
-        $c = $cell->getStyle('B1')->getFont()->getBold();
-        $c = $cell->getStyle('B1')->getFont()->getItalic();
-        $c = $cell->getStyle('B1')->getFont()->getStrikethrough();
-        //fill
-        $c = $cell->getStyle('B1')->getFill()->getFillType();
-        $c = $cell->getStyle('B1')->getFill()->getRotation();
-        $c = $cell->getStyle('B1')->getFill()->getStartColor()->getARGB();
-        $c = $cell->getStyle('B1')->getFill()->getEndColor()->getARGB();
-        //borders
-        $c = $cell->getStyle('B1')->getBorders()->getLeft()->getBorderStyle();
-        $c = $cell->getStyle('B1')->getBorders()->getRight()->getBorderStyle();
-        $c = $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle();
-        $c = $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle();
-        $c = $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle();
+//borders
+$c = $cell->getStyle('B1')->getBorders()->getLeft()->getBorderStyle();
+$c = $cell->getStyle('B1')->getBorders()->getRight()->getBorderStyle();
+$c = $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle();
+$c = $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle();
+$c = $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle();
     
     
     // }
 // }
-
