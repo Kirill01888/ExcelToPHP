@@ -88,10 +88,10 @@
 //         'top' => $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle(),
 //         'bottom' => $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle(),
 //         'diagonal' => $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle(),
-//         // 'outline' => $cell->getStyle('B1')->getBorders()->getOutline()->getBorderStyle(),
-//         // 'inside' => $cell->getStyle('B1')->getBorders()->getInside()->getBorderStyle(),
-//         // 'vertical' => $cell->getStyle('B1')->getBorders()->getVertical()->getBorderStyle(),
-//         // 'horizontal' => $cell->getStyle('B1')->getBorders()->getHorizontal()->getBorderStyle(),
+// 'outline' => $cell->getStyle('B1')->getBorders()->getOutline()->getBorderStyle(),
+// 'inside' => $cell->getStyle('B1')->getBorders()->getInside()->getBorderStyle(),
+// 'vertical' => $cell->getStyle('B1')->getBorders()->getVertical()->getBorderStyle(),
+// 'horizontal' => $cell->getStyle('B1')->getBorders()->getHorizontal()->getBorderStyle(),
 //     ]
 
 // ];
@@ -105,22 +105,21 @@ use PhpOffice\PhpSpreadsheet\Worksheet;
 // class MakeTemplate{
 
 $bord = [
-    'borders' => [
-        'top' => "'top' => [
+        'top' => ['top' => "'top' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
-        'bottom' => "'bottom' => [
+                ],"],
+        'bottom' => ['bottom' => "'bottom' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
-        'left' => "'left' => [
+                ],"],
+        'left' => ['left' => "'left' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
-        'right' => "'right' => [
+                ],"],
+        'right' => ['right' => "'right' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
-        'diagonal' => "'diagonal' => [
+                ],"],
+        'diagonal' => ['diagonal' => "'diagonal' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
+                ],"],
         'allBorders' => "'allBorders' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
                 ],",
@@ -135,8 +134,7 @@ $bord = [
                 ],",
         'horizontal' => "'horizontal' => [
                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::<BRD>,
-                ],",
-    ],
+                ],"
 ];
 
 $arrBorders = [
@@ -232,7 +230,8 @@ $baseTemplate = [
                 'superscript' => <SUP>,
                 'color' => <ARGB>,
                 'underline' => <UND>,
-                'strikethrough' => <STK>],"
+                'strikethrough' => <STK>
+            ],"
 ];
 
 //alignment
@@ -264,10 +263,16 @@ $font =
             'underline' => \PhpOffice\PhpSpreadsheet\Style\Font::<UND>,
             'strikethrough' => <STK>,
             ";
-$fill = 
-"'fill' => 
-    
-"
+$fill =
+    "'fill' => 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::<FILL>,
+        <IFGRAD>";
+$fillGrad = "'rotation' => <R>,
+            'startColor' => [
+            'argb' => <COLS>,
+            ],
+            'endColor' => [
+            'argb' => '<COLE>',
+            ],";
 //font
 $c = $cell->getStyle('B1')->getFont()->getSize();
 $baseTemplate["alignment"] = str_replace('<SIZE>', $c, $baseTemplate["alignment"]);
@@ -276,46 +281,86 @@ $myHash .= substr($c, 0, 3);
 $baseTemplate["alignment"] = str_replace('<NAME>', $c, $baseTemplate["alignment"]);
 $c = $cell->getStyle('B1')->getFont()->getColor()->getARGB();
 $baseTemplate["font"] = str_replace('<ARGB>', $c, $baseTemplate["font"]);
-$c = $cell->getStyle('B1')->getFont()->getSubscript() ? 'true':'false';
+$c = $cell->getStyle('B1')->getFont()->getSubscript() ? 'true' : 'false';
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<SUB>', $c, $baseTemplate["font"]);
-$c = $cell->getStyle('B1')->getFont()->getSuperscript() ? 'true':'false';
+$c = $cell->getStyle('B1')->getFont()->getSuperscript() ? 'true' : 'false';
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<SUP>', $c, $baseTemplate["font"]);
 $c = $cell->getStyle('B1')->getFont()->getUnderline();
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<UND>', $arrUnderLine[$c], $baseTemplate["font"]);
-$c = $cell->getStyle('B1')->getFont()->getBold() ? 'true':'false';
+$c = $cell->getStyle('B1')->getFont()->getBold() ? 'true' : 'false';
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<BOLD>', $c, $baseTemplate["font"]);
-$c = $cell->getStyle('B1')->getFont()->getItalic() ? 'true':'false';
+$c = $cell->getStyle('B1')->getFont()->getItalic() ? 'true' : 'false';
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<ITAL>', $c, $baseTemplate["font"]);
-$c = $cell->getStyle('B1')->getFont()->getStrikethrough() ? 'true':'false';
+$c = $cell->getStyle('B1')->getFont()->getStrikethrough() ? 'true' : 'false';
 $myHash .= substr($c, 0, 3);
 $baseTemplate["font"] = str_replace('<STK>', $c, $baseTemplate["font"]);
-echo "<pre>";
-echo $myHash . '<br>';
-var_dump($baseTemplate);
-echo "</pre>";
+
 //fill
 $c = $cell->getStyle('B1')->getFill()->getFillType();
-if($c != null){
-    $baseTemplate['fill'] = '';
+echo $c=='path';
+if ($c == 'linear' or $c == 'path') {
+    $baseTemplate['fill'] = $fill;
     $myHash .= substr($c, 0, 3);
-    $baseTemplate["fill"] = str_replace('<STK>', $c, $baseTemplate["font"]);
+    $baseTemplate["fill"] = str_replace('<IFGRAD>', $fillGrad, $baseTemplate["fill"]);
+    $baseTemplate["fill"] = str_replace('<FILL>', $arrFills[$c], $baseTemplate["fill"]);
+    $myHash .= substr($c, 0, 3);
     $c = $cell->getStyle('B1')->getFill()->getRotation();
+    $baseTemplate["fill"] = str_replace('<R>', $c, $baseTemplate["fill"]);
     $c = $cell->getStyle('B1')->getFill()->getStartColor()->getARGB();
+    $baseTemplate["fill"] = str_replace('<COLS>', $c, $baseTemplate["fill"]);
     $c = $cell->getStyle('B1')->getFill()->getEndColor()->getARGB();
+    $baseTemplate["fill"] = str_replace('<COLE>', $c, $baseTemplate["fill"]);
+} else {
+    $baseTemplate["fill"] = str_replace('<FILL>', $arrFills[$c], $baseTemplate["fill"]);
 }
+
 
 //borders
 $c = $cell->getStyle('B1')->getBorders()->getLeft()->getBorderStyle();
+if($c != 'none'){
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate['borders'] = $bord['left'];
+    $baseTemplate['borders']['left'] = str_replace('<BRD>', $c, $baseTemplate['borders']['left']);
+}
+
 $c = $cell->getStyle('B1')->getBorders()->getRight()->getBorderStyle();
+if($c != 'none'){
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate['borders'] = $bord['right'];
+    $baseTemplate['borders']['right'] = str_replace('<BRD>', $c, $baseTemplate['borders']['right']);
+}
 $c = $cell->getStyle('B1')->getBorders()->getTop()->getBorderStyle();
+if($c != 'none'){
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate['borders'] = $bord['top'];
+    $baseTemplate['borders']['top'] = str_replace('<BRD>', $c, $baseTemplate['borders']['top']);
+}
 $c = $cell->getStyle('B1')->getBorders()->getBottom()->getBorderStyle();
+if($c != 'none'){
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate['borders'] = $bord['bottom'];
+    $baseTemplate['borders']['bottom'] = str_replace('<BRD>', $c, $baseTemplate['borders']['bottom']);
+}
 $c = $cell->getStyle('B1')->getBorders()->getDiagonal()->getBorderStyle();
-    
-    
+if($c != 'none'){
+    $myHash .= substr($c, 0, 3);
+    $baseTemplate['borders'] = $bord['diagonal'];
+    $baseTemplate['borders']['diagonal'] = str_replace('<BRD>', $c, $baseTemplate['borders']['diagonal']);
+}
+// $c = $cell->getStyle('B1')->getBorders()->getOutline()->getBorderStyle();
+// $c = $cell->getStyle('B1')->getBorders()->getInside()->getBorderStyle();
+// $c = $cell->getStyle('B1')->getBorders()->getVertical()->getBorderStyle();
+// $c = $cell->getStyle('B1')->getBorders()->getHorizontal()->getBorderStyle();
+
+echo "<pre>";
+echo $myHash . '<br>';
+echo "<br>";
+var_dump($baseTemplate);
+echo "</pre>";
     // }
 // }
